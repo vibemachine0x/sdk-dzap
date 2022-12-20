@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+
 export function applyMixins(derivedCtor: any, constructors: any[]) {
   constructors.forEach((baseCtor) => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
@@ -10,3 +12,6 @@ export function applyMixins(derivedCtor: any, constructors: any[]) {
     });
   });
 }
+
+export const getChecksumAddress = (address: string) =>
+  ethers.utils.getAddress(address);

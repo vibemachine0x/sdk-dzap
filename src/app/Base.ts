@@ -1,29 +1,27 @@
 import fetch from "isomorphic-unfetch";
-import { baseUrl } from "./config/app-config";
-
-type Config = {
-  clientId: number;
-  chainId: number;
-  provider: any;
-};
+import { baseUrl } from "../config";
+import { Constructor } from "../types";
 
 export abstract class Base {
-  private clientId: number;
+  protected clientId: number;
+  protected nftId: number;
   protected chainId: number;
-  private provider: any;
-  constructor(config: Config) {
-    this.clientId = config.clientId;
+  protected provider: any;
+
+  constructor(config: Constructor) {
+    this.clientId = config.clientId || 0;
+    this.nftId = config.nftId || 0;
     this.chainId = config.chainId;
     this.provider = config.provider;
   }
 
   protected invoke<T>(endpint: string, params: any): Promise<T> {
-    console.log(this.clientId, this.chainId, this.provider);
-
     const url = `${baseUrl}${endpint}`;
     const headers = {
       "Content-Type": "application/json",
     };
+    console.log(params);
+    
     const config = {
       ...params,
       headers,
