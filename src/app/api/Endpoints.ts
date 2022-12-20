@@ -1,25 +1,17 @@
 import { Base } from "../Base";
-import {
-  GetPathRequest,
-  GetSwapParamsRequest,
-  GetSwapParamsResponse,
-} from "./types";
+import { GetSwapParamsResponse, Request } from "./types";
 
 export class Endpoints extends Base {
-  getPath(request: GetPathRequest): Promise<any> {
+  getQuoteRate(request: Request[]): Promise<any> {
     return this.invoke("swap/get-path", {
       chainId: this.chainId,
-      requests: request.requests,
+      requests: request,
     });
   }
-  
-  getTokens(): Promise<any> {
-    return this.invoke("https://api.dzap.io/token/get-all?chainId=137", {});
-  }
-  getSwapParams(request: GetSwapParamsRequest): Promise<GetSwapParamsResponse> {
+  getSwapParams(request: Request[]): Promise<GetSwapParamsResponse> {
     return this.invoke("swap/get-params", {
       chainId: this.chainId,
-      swapParams: request.swapParams,
+      swapParams: request,
     });
   }
 }

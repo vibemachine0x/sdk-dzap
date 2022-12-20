@@ -5,13 +5,6 @@ export type Request = {
   slippage: number;
 };
 
-export interface GetPathRequest {
-  requests: Request[];
-}
-
-export interface GetSwapParamsRequest {
-  swapParams: Request[];
-}
 export interface GetSwapParamsResponse {
   value: string;
   ercSwapDetails: {

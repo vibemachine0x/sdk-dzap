@@ -1,4 +1,4 @@
-import fetch from "isomorphic-unfetch";
+import Axios from "axios";
 import { baseUrl } from "../config";
 import { Constructor } from "../types";
 
@@ -15,22 +15,14 @@ export abstract class Base {
     this.provider = config.provider;
   }
 
-  protected invoke<T>(endpint: string, params: any): Promise<T> {
+  protected invoke<T>(endpint: string, data: any): Promise<T> {
     const url = `${baseUrl}${endpint}`;
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    console.log(params);
-    
-    const config = {
-      ...params,
-      headers,
-    };
-    return fetch(url, config).then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    });
+    return Axios({
+      method: "put",
+      url,
+      data,
+    })
+      .then(({ data }) => data)
+      .catch((error) => Promise.reject(error));
   }
 }

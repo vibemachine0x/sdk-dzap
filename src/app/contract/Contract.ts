@@ -1,21 +1,27 @@
 import { ethers } from "ethers";
-import { GAS_MULTIPLIER, STATUS } from "src/constants";
-import { getChecksumAddress } from "src/utils";
 import { config } from "../../config/config";
+import { GAS_MULTIPLIER } from "../../constants";
+import { getChecksumAddress } from "../../utils";
 import { Endpoints } from "../api/Endpoints";
-import { GetSwapParamsRequest } from "../api/types";
+import { Request } from "../api/types";
 
 export class Contract extends Endpoints {
+  getContractAddress(): any {
+    try {
+      const contractAddress = config.contractAddresses[this.chainId];
+      return getChecksumAddress(contractAddress);
+    } catch (error) {
+      throw new Error("Unsupported chainId");
+    }
+  }
   getContract(): any {
-    const contractAddress = config.contractAddresses[this.chainId];
     return new ethers.Contract(
-      getChecksumAddress(contractAddress),
+      this.getContractAddress(),
       config.abi,
       this.provider
     );
   }
-
-  async swap(request: GetSwapParamsRequest, recipient: string): Promise<any> {
+  async swap(request: Request[], recipient: string): Promise<any> {
     try {
       const method = config.methods.batchSwap;
       const contract = this.getContract();
@@ -29,9 +35,9 @@ export class Contract extends Endpoints {
         value,
       });
       const res = await result.wait();
-      return { status: STATUS.success, data: res };
+      return res;
     } catch (err) {
-      return { status: STATUS.error, data: err };
+      return err;
     }
   }
 }
