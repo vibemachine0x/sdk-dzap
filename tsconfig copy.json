@@ -9,8 +9,9 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "esModuleInterop": true,
     "moduleResolution": "Node"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "test", "lib", "**/*spec.tx"]
+  "include": ["src/**/*", "./**/*.ts"],
+  "exclude": ["node_modules", "./tests/", "lib", "**/*spec.tx"]
 }

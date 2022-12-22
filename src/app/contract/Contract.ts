@@ -8,19 +8,25 @@ import { Request } from "../api/types";
 export class Contract extends Endpoints {
   getContractAddress(): any {
     try {
-      const contractAddress = config.contractAddresses[this.chainId];
-      return getChecksumAddress(contractAddress);
+      const address = config.contractAddresses?.[this.chainId] || undefined;
+      return getChecksumAddress(address);
+    } catch {
+      throw new Error("Unsupported chainId");
+    }
+  }
+
+  getContract(): any {
+    try {
+      return new ethers.Contract(
+        this.getContractAddress(),
+        config.abi,
+        this.provider
+      );
     } catch (error) {
       throw new Error("Unsupported chainId");
     }
   }
-  getContract(): any {
-    return new ethers.Contract(
-      this.getContractAddress(),
-      config.abi,
-      this.provider
-    );
-  }
+
   async swap(request: Request[], recipient: string): Promise<any> {
     try {
       const method = config.methods.batchSwap;
